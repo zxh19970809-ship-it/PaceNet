@@ -1,0 +1,12 @@
+# Install a matching torch/torchvision CUDA build for your hardware.
+torch
+torchvision
+numpy
+PyYAML
+scikit-learn
+tqdm
+tensorboard
+einops
+opencv-python
+matplotlib
+Pillow

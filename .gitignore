@@ -1,0 +1,53 @@
+# Python and environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+.pytest_cache/
+
+# Private credentials
+*.pem
+*.key
+credentials*.json
+
+# Dataset samples and trained artifacts
+/data/
+/weights/
+*.pkl
+*.pickle
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.npz
+*.npy
+*.mp4
+*.avi
+*.mov
+*.xlsx
+*.xls
+*.zip
+*.7z
+*.rar
+
+# Generated experiment outputs
+/output/
+/evaluation/
+/artifacts/
+/checkpoints/
+/logs/
+/live/cache/
+/live/manifests/
+/live/audit/
+/live/results/
+*.log
+events.out.tfevents.*
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

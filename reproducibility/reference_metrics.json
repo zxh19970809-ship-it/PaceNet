@@ -1,0 +1,19 @@
+{
+  "protocol": "official Scoliosis1K 1:1:8 TEST_SET",
+  "checkpoint_iteration": 24000,
+  "seed": 2026,
+  "sample_count": 749,
+  "accuracy": 0.951935914552737,
+  "macro_precision": 0.9274225582742698,
+  "macro_recall": 0.9658105087699361,
+  "macro_f1": 0.9435429643404376,
+  "positive_recall": 0.9212410501193318,
+  "positive_to_neutral_count": 29,
+  "confusion_matrix": [
+    [204, 0, 0],
+    [0, 123, 3],
+    [4, 29, 386]
+  ],
+  "checkpoint_sha256": "c4f57386520d91de73d11e400ff30fb5e4c1ef4b24e4cad632c987133ede8434",
+  "split_sha256": "7c9f46cc981568a2b0f38b72c1ffdea563e549429b4d52c5e73b106b2a5da803"
+}

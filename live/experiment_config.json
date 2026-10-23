@@ -1,0 +1,84 @@
+{
+  "schema": "live-gait-cv-config-v1",
+  "seed": 20261012,
+  "eligible_csv": "manifests/eligible_videos_final.csv",
+  "input_dir": "cache/video_inputs",
+  "output_dir": "results/classification_cv_20261012",
+  "preprocessing": {
+    "completion_marker": "audit/agent4_full_preprocessing_complete.json",
+    "required_schema": "live-video-full-input-complete-v1",
+    "full_video_mode_max_frames": 0,
+    "require_finalized_selection": true,
+    "expected_npz_schema": "live-video-input-v1",
+    "expected_target_fps": 15.0,
+    "max_frames_per_video": 720
+  },
+  "temporal": {
+    "max_frames_per_video": 720,
+    "train_frames_per_clip": 30,
+    "inference_frame_chunk": 64
+  },
+  "evaluation": {
+    "num_folds": 5,
+    "validation_fraction": 0.2,
+    "validation_selection_metric": "subject_macro_f1",
+    "validation_tie_breaker": "lower_subject_cross_entropy",
+    "bootstrap_repetitions": 2000,
+    "bootstrap_seed": 202645031
+  },
+  "sampling": {
+    "batch_subjects": 15,
+    "subjects_per_class_per_batch": 5,
+    "clips_per_subject_per_batch": 2,
+    "videos_per_batch": 30,
+    "steps_per_epoch_policy": "max(ceil(training videos / 30), ceil(max training subjects per class / 5))",
+    "data_rng_policy": "deterministic NumPy per fold/epoch; identical subject, clip and ordered-frame plan across variants"
+  },
+  "training": {
+    "epochs": 100,
+    "amp": true,
+    "optimizer": "SGD",
+    "checkpoint_selection": "best inner-validation subject macro-F1; ties use lower inner-validation subject cross-entropy",
+    "early_stopping": false
+  },
+  "optimizer": {
+    "lr": 0.001,
+    "momentum": 0.9,
+    "weight_decay": 0.0005,
+    "nesterov": false
+  },
+  "scheduler": {
+    "type": "MultiStepLR",
+    "milestones": [
+      70,
+      85,
+      95
+    ],
+    "gamma": 0.1
+  },
+  "loss": {
+    "triplet_margin": 0.2,
+    "triplet_weight": 1.0,
+    "ce_scale": 16.0,
+    "label_smoothing": 0.1,
+    "ce_weight": 1.0,
+    "phase_weight": 0.1,
+    "phase_regularization": {
+      "smooth_weight": 1.0,
+      "balance_weight": 0.2,
+      "sharpness_weight": 0.02,
+      "cycle_weight": 0.1
+    }
+  },
+  "model_variants": [
+    "global",
+    "uniform",
+    "unconstrained",
+    "cspt"
+  ],
+  "class_to_index": {
+    "CP": 0,
+    "ITW": 1,
+    "TD": 2
+  }
+}

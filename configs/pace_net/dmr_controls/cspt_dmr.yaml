@@ -1,0 +1,164 @@
+# Historical DMR-equipped matched control; not the primary model.
+data_cfg:
+  dataset_name: Scoliosis1K
+  dataset_root:
+  - /path/to/Scoliosis1K-skeleton-map-pkl
+  - /path/to/Scoliosis1K-pkl
+  dataset_partition: datasets/Scoliosis1K/Scoliosis1K_118.json
+  num_workers: 2
+  cache: false
+  remove_no_gallery: false
+  test_dataset_name: Scoliosis1K
+evaluator_cfg:
+  enable_float16: true
+  restore_ckpt_strict: true
+  restore_hint: 0
+  save_name: DRFPlusPhase_A1A2_full118_seed2026
+  eval_func: evaluate_scoliosis
+  sampler:
+    batch_shuffle: false
+    batch_size: 1
+    sample_type: all_ordered
+    frames_all_limit: 720
+    sample_from_sequence: true
+    type: InferenceSampler
+  metric: euc
+  transform: []
+loss_cfg:
+- loss_term_weight: 1.0
+  margin: 0.2
+  type: TripletLoss
+  log_prefix: triplet
+- loss_term_weight: 1.0
+  scale: 16
+  type: CrossEntropyLoss
+  class_weight:
+  - 1.0
+  - 1.0
+  - 1.0
+  log_prefix: softmax
+  log_accuracy: true
+- loss_term_weight: 0.1
+  smooth_weight: 1.0
+  balance_weight: 0.2
+  sharpness_weight: 0.02
+  cycle_weight: 0.1
+  type: PhaseRegularizationLoss
+  log_prefix: phase_regularization
+model_cfg:
+  model: PACENet
+  ablation_stage: A2
+  feature_channels: 512
+  num_phases: 4
+  phase_hidden_dim: 256
+  phase_temperature: 1.0
+  phase_min_mass_fraction: 0.05
+  phase_assignment_balance_strength: 0.5
+  phase_balance_iterations: 4
+  phase_normalize_assignment_logits: true
+  phase_dropout: 0.1
+  phase_attention_heads: 8
+  phase_ffn_dim: 1024
+  phase_layers: 1
+  map_backbone_cfg:
+    type: ResNet9
+    block: BasicBlock
+    in_channel: 2
+    channels:
+    - 64
+    - 128
+    - 256
+    - 512
+    layers:
+    - 1
+    - 1
+    - 1
+    - 1
+    strides:
+    - 1
+    - 2
+    - 2
+    - 1
+    maxpool: false
+  sil_backbone_cfg:
+    type: ResNet9
+    block: BasicBlock
+    in_channel: 1
+    channels:
+    - 64
+    - 128
+    - 256
+    - 512
+    layers:
+    - 1
+    - 1
+    - 1
+    - 1
+    strides:
+    - 1
+    - 2
+    - 2
+    - 1
+    maxpool: false
+  motion_backbone_cfg:
+    type: ResNet9
+    block: BasicBlock
+    in_channel: 2
+    channels:
+    - 32
+    - 64
+    - 128
+    - 512
+    layers:
+    - 1
+    - 1
+    - 1
+    - 1
+    strides:
+    - 1
+    - 2
+    - 2
+    - 1
+    maxpool: false
+  SeparateFCs:
+    in_channels: 512
+    out_channels: 256
+    parts_num: 4
+  SeparateBNNecks:
+    class_num: 3
+    in_channels: 256
+    parts_num: 4
+optimizer_cfg:
+  lr: 0.003
+  momentum: 0.9
+  solver: SGD
+  weight_decay: 0.0005
+scheduler_cfg:
+  gamma: 0.1
+  milestones:
+  - 14000
+  - 19000
+  - 22000
+  scheduler: MultiStepLR
+trainer_cfg:
+  enable_float16: false
+  fix_BN: false
+  with_test: false
+  log_iter: 50
+  restore_ckpt_strict: true
+  restore_hint: 0
+  save_iter: 1000
+  save_name: DRFPlusPhase_A1A2_full118_seed2026
+  sync_BN: false
+  total_iter: 24000
+  sampler:
+    batch_shuffle: true
+    batch_size:
+    - 3
+    - 2
+    frames_num_fixed: 30
+    frames_skip_num: 0
+    sample_type: fixed_allordered
+    sample_from_sequence: true
+    type: ClinicalClassBalancedSampler
+  transform: []

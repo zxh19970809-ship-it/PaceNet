@@ -1,0 +1,4 @@
+﻿metric,comparison,control_variant,n_paired_subjects,observed_delta,bootstrap_95ci_low,bootstrap_95ci_high,bootstrap_two_sided_p,bootstrap_repetitions
+subject_macro_f1,cspt - global,global,55,0.11824769433465088,-0.03934054561461807,0.27088696542332064,0.124,2000
+subject_macro_f1,cspt - uniform,uniform,55,0.111371237458194,-0.031950835040897255,0.25845824397995354,0.126,2000
+subject_macro_f1,cspt - unconstrained,unconstrained,55,0.09565217391304348,-0.02951282388579446,0.22741777450395792,0.126,2000
